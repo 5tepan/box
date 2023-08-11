@@ -1,0 +1,14 @@
+.square {
+    width: 500px;
+    height: 500px;
+    border: 2px solid black;
+    background-color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.coordinate {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+}
