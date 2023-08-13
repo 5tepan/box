@@ -1,16 +1,9 @@
-.gridRow,
-.gridCol {
+.gridCell {
     position: absolute;
-    background-color: #f0f0f0;
-    opacity: 0.5;
-}
-
-.gridRow {
     width: 100%;
-    height: 1px;
-}
-
-.gridCol {
-    width: 1px;
     height: 100%;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transform: scaleY(-1);
+    pointer-events: none;
 }
