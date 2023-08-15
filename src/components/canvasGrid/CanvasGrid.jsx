@@ -1,13 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react'
 import {useCoordinateContext} from "../coordinateContext/CoordinateContext"
 
-import styles from './CanvasGrid.module.css'
-
 const CanvasGrid = () => {
     const canvasRef = useRef(null)
     const [ctx, setCtx] = useState(null)
     const [start, setStart] = useState(null)
     const [offset, setOffset] = useState({ x: 0, y: 0 })
+    const [cellSize, setCellSize] = useState(20)
 
     const { updateXCoordinate, updateYCoordinate } = useCoordinateContext()
 
@@ -23,11 +22,11 @@ const CanvasGrid = () => {
         if (ctx) {
             draw()
         }
-    }, [ctx, offset])
+    }, [ctx, offset, cellSize])
 
     const draw = () => {
         const context = ctx
-        let step = 10
+        let step = cellSize
         let left = Math.floor(offset.x / step) * step
         let top = Math.floor(offset.y / step) * step
         let right = left + window.innerWidth
@@ -39,11 +38,15 @@ const CanvasGrid = () => {
         for (let x = left; x < right; x += step) {
             context.moveTo(x - offset.x, 0)
             context.lineTo(x - offset.x, canvasRef.current.height)
+
+            context.fillText((x - offset.x).toString(), x - offset.x, 10)
         }
 
         for (let y = top; y < bottom; y += step) {
             context.moveTo(0, y - offset.y)
             context.lineTo(canvasRef.current.width, y - offset.y)
+
+            context.fillText((y - offset.y).toString(), 3, y - offset.y)
         }
 
         context.strokeStyle = "lightgrey"
@@ -73,7 +76,7 @@ const CanvasGrid = () => {
         if (start) {
             const position = getPosition(e)
 
-            const offsetX = position.x - start.x
+            const offsetX = (position.x - start.x)
             const offsetY = position.y - start.y
 
             updateXCoordinate(position.x - offset.x)
@@ -88,18 +91,25 @@ const CanvasGrid = () => {
         }
     }
 
+    const wheel = (e) => {
+        const newCellSize = cellSize + (e.deltaY > 0 ? -1 : 1)
+
+        if (newCellSize >= 1 && newCellSize <= 100) {
+            setCellSize(newCellSize)
+        }
+    }
+
     return (
-        <div className={styles.container}>
-            <canvas
-                ref={canvasRef}
-                onMouseDown={mouseDown}
-                onMouseUp={mouseUp}
-                onMouseMove={mouseMove}
-                onMouseLeave={mouseLeave}
-                width={10000}
-                height={10000}
-            />
-        </div>
+        <canvas
+            ref={canvasRef}
+            onMouseDown={mouseDown}
+            onMouseUp={mouseUp}
+            onMouseMove={mouseMove}
+            onMouseLeave={mouseLeave}
+            onWheel={wheel}
+            width={10000}
+            height={10000}
+        />
     )
 }
 
