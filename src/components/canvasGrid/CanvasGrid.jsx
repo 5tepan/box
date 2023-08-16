@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import {useCoordinateContext} from "../coordinateContext/CoordinateContext"
+import {getPosition} from "../../utils/Position"
+import {draw} from "../../utils/Draw"
 
 const CanvasGrid = () => {
     const canvasRef = useRef(null)
@@ -20,46 +22,13 @@ const CanvasGrid = () => {
 
     useEffect(() => {
         if (ctx) {
-            draw()
+            draw(ctx, cellSize, offset, canvasRef)
         }
     }, [ctx, offset, cellSize])
 
-    const draw = () => {
-        const context = ctx
-        let step = cellSize
-        let left = Math.floor(offset.x / step) * step
-        let top = Math.floor(offset.y / step) * step
-        let right = left + window.innerWidth
-        let bottom = top + window.innerHeight
-
-        context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
-        context.beginPath()
-
-        for (let x = left; x < right; x += step) {
-            context.moveTo(x - offset.x, 0)
-            context.lineTo(x - offset.x, canvasRef.current.height)
-
-            context.fillText((x - offset.x).toString(), x - offset.x, 10)
-        }
-
-        for (let y = top; y < bottom; y += step) {
-            context.moveTo(0, y - offset.y)
-            context.lineTo(canvasRef.current.width, y - offset.y)
-
-            context.fillText((y - offset.y).toString(), 3, y - offset.y)
-        }
-
-        context.strokeStyle = "lightgrey"
-        context.stroke()
-    }
-
-    const getPosition = (e) => ({
-        x: e.clientX - canvasRef.current.offsetLeft,
-        y: e.clientY - canvasRef.current.offsetTop
-    })
-
     const mouseDown = (e) => {
-        setStart(getPosition(e))
+        const position = getPosition(e, canvasRef)
+        setStart(position)
     }
 
     const mouseUp = () => {
@@ -67,14 +36,12 @@ const CanvasGrid = () => {
     }
 
     const mouseLeave = () => {
-        if (start) {
-            setStart(null)
-        }
+        setStart(null)
     }
 
     const mouseMove = (e) => {
         if (start) {
-            const position = getPosition(e)
+            const position = getPosition(e, canvasRef)
 
             const offsetX = (position.x - start.x)
             const offsetY = position.y - start.y
@@ -87,11 +54,11 @@ const CanvasGrid = () => {
                 y: prevOffset.y + offsetY
             }))
 
-            draw()
+            draw(ctx, cellSize, offset, canvasRef)
         }
     }
 
-    const wheel = (e) => {
+    const zoom = (e) => {
         const newCellSize = cellSize + (e.deltaY > 0 ? -1 : 1)
 
         if (newCellSize >= 1 && newCellSize <= 100) {
@@ -106,7 +73,7 @@ const CanvasGrid = () => {
             onMouseUp={mouseUp}
             onMouseMove={mouseMove}
             onMouseLeave={mouseLeave}
-            onWheel={wheel}
+            onWheel={zoom}
             width={10000}
             height={10000}
         />

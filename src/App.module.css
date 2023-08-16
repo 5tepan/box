@@ -13,11 +13,6 @@
     align-items: center;
 }
 
-.coordinateX {
-    transform: scale(1);
-}
-
 .coordinateY {
     rotate: -90deg;
-    transform: scale(1);
 }

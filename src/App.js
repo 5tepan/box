@@ -15,7 +15,7 @@ const App = () => {
                 </div>
                 <div className={styles.block}>
                     <Box/>
-                    <div className={styles.coordinateX}>
+                    <div>
                         <Coordinate label={'X'}/>
                     </div>
                 </div>
