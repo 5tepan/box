@@ -43,7 +43,7 @@ const CanvasGrid = () => {
         if (start) {
             const position = getPosition(e, canvasRef)
 
-            const offsetX = (position.x - start.x)
+            const offsetX = position.x - start.x
             const offsetY = position.y - start.y
 
             updateXCoordinate(position.x - offset.x)
@@ -53,8 +53,6 @@ const CanvasGrid = () => {
                 x: prevOffset.x + offsetX,
                 y: prevOffset.y + offsetY
             }))
-
-            draw(ctx, cellSize, offset, canvasRef)
         }
     }
 
