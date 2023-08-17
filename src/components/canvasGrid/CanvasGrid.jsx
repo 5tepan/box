@@ -10,7 +10,7 @@ const CanvasGrid = () => {
     const [offset, setOffset] = useState({ x: 0, y: 0 })
     const [cellSize, setCellSize] = useState(20)
 
-    const { updateXCoordinate, updateYCoordinate } = useCoordinateContext()
+    const {coordinate, updateCoordinate} = useCoordinateContext()
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -46,8 +46,10 @@ const CanvasGrid = () => {
             const offsetX = position.x - start.x
             const offsetY = position.y - start.y
 
-            updateXCoordinate(position.x - offset.x)
-            updateYCoordinate(position.y - offset.y)
+            updateCoordinate(
+                coordinate.x + offsetX,
+                coordinate.y + offsetY
+            )
 
             setOffset(prevOffset => ({
                 x: prevOffset.x + offsetX,

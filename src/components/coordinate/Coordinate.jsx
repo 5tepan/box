@@ -2,8 +2,8 @@ import React from 'react'
 import {useCoordinateContext} from "../coordinateContext/CoordinateContext"
 
 const Coordinate = ({label}) => {
-    const { xCoordinate, yCoordinate } = useCoordinateContext()
-    const value = label === 'X' ? xCoordinate : yCoordinate
+    const {coordinate} = useCoordinateContext()
+    const value = label === 'X' ? coordinate.x : coordinate.y
 
     return (
         <p>

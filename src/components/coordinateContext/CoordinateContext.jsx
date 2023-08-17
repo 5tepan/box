@@ -6,20 +6,15 @@ export const useCoordinateContext = () => {
     return useContext(CoordinateContext)
 }
 
-export const CoordinateProvider = ({ children }) => {
-    const [xCoordinate, setXCoordinate] = useState(0)
-    const [yCoordinate, setYCoordinate] = useState(0)
+export const CoordinateProvider = ({children}) => {
+    const [coordinate, setCoordinate] = useState({x: 0, y: 0})
 
-    const updateXCoordinate = (x) => {
-        setXCoordinate(x)
-    }
-
-    const updateYCoordinate = (y) => {
-        setYCoordinate(y)
+    const updateCoordinate = (x, y) => {
+        setCoordinate({x, y})
     }
 
     return (
-        <CoordinateContext.Provider value={{xCoordinate, yCoordinate, updateXCoordinate, updateYCoordinate}}>
+        <CoordinateContext.Provider value={{coordinate, updateCoordinate}}>
             {children}
         </CoordinateContext.Provider>
     )
